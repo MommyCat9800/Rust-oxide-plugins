@@ -42,7 +42,7 @@ namespace Oxide.Plugins
 
                 float dist = Vector3.Distance(lastPositions[player.userID], current);
 
-                if (dist > 200f)
+                if (dist > 50f)
                 {
                     if (IsVanished(player))
                         Send($"🗺️ {player.displayName} VANISH TP: {GetGrid(lastPositions[player.userID])} → {GetGrid(current)}");
@@ -90,8 +90,8 @@ namespace Oxide.Plugins
             int size = ConVar.Server.worldsize;
             float offset = size / 2f;
 
-            int x = Mathf.FloorToInt((pos.x + offset) / 146.3f);
-            int z = Mathf.FloorToInt((offset - pos.z) / 146.3f);
+            int x = Mathf.FloorToInt((pos.x + offset) / 150f);
+            int z = Mathf.FloorToInt((offset - pos.z) / 150f);
 
             char letter = (char)('A' + x);
             return $"{letter}{z}";
