@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Oxide.Plugins
 {
-    [Info("AdminLogger", "ChatGPT", "3.2.0")]
+    [Info("AdminLogger", "ChatGPT & MommyCat", "3.2.3")]
     public class AdminLogger : RustPlugin
     {
         [PluginReference]
@@ -28,29 +28,38 @@ namespace Oxide.Plugins
 
         void CheckTeleport()
         {
-            foreach (var player in BasePlayer.activePlayerList)
-            {
-                if (player == null) continue;
+            foreach (var currentPlayer in BasePlayer.activePlayerList)
+            {   
+                
+                if (currentPlayer == null) continue;
 
-                Vector3 current = player.transform.position;
 
-                if (!lastPositions.ContainsKey(player.userID))
+
+                Vector3 currentPPos = currentPlayer.transform.position;
+
+                if (currentPlayer.IsDead())
                 {
-                    lastPositions[player.userID] = current;
+                    lastPositions.Remove(currentPlayer.userID);
                     continue;
                 }
 
-                float dist = Vector3.Distance(lastPositions[player.userID], current);
+                if (!lastPositions.ContainsKey(currentPlayer.userID))
+                {
+                    lastPositions[currentPlayer.userID] = currentPPos;
+                    continue;
+                }
+
+                float dist = Vector3.Distance(lastPositions[currentPlayer.userID], currentPPos);
 
                 if (dist > 50f)
                 {
-                    if (IsVanished(player))
-                        Send($"🗺️ {player.displayName} VANISH TP: {GetGrid(lastPositions[player.userID])} → {GetGrid(current)}");
+                    if (IsVanished(currentPlayer))
+                        Send($"🗺️ {currentPlayer.displayName} VANISH TP: {GetGrid(lastPositions[currentPlayer.userID])} → {GetGrid(currentPPos)}");
                     else
-                        Send($"🗺️ {player.displayName} TP: {GetGrid(lastPositions[player.userID])} → {GetGrid(current)}");
+                        Send($"🗺️ {currentPlayer.displayName} TP: {GetGrid(lastPositions[currentPlayer.userID])} → {GetGrid(currentPPos)}");
                 }
 
-                lastPositions[player.userID] = current;
+                lastPositions[currentPlayer.userID] = currentPPos;
             }
         }
 
