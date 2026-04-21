@@ -132,7 +132,8 @@ namespace Oxide.Plugins
             if (player == null) return null;
 
             string cmd = arg.cmd.FullName.ToLower();
-            string[] args = arg.Args;
+            string[] args = arg.Args.Fullstring;
+
 
             // 🎁 GIVE
             if (cmd.Contains("give"))
